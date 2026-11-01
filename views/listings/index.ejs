@@ -1,0 +1,89 @@
+
+<% layout("/layouts/boilerplate") %>
+
+<h1>All Listings</h1>
+
+
+<form action="/listings" method="GET" class="mb-4">
+    <div class="input-group mb-2">
+        <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Search title, location, or country..."
+            value="<%= typeof search !== 'undefined' ? search : '' %>"
+        >
+        <button class="btn btn-dark" type="submit">
+            Search
+        </button>
+    </div>
+
+    <div class="row g-2">
+        <div class="col-md-5">
+            <input
+                type="number"
+                name="minPrice"
+                class="form-control"
+                placeholder="Minimum price (₹)"
+                min="0"
+                value="<%= typeof minPrice !== 'undefined' ? minPrice : '' %>"
+            >
+        </div>
+
+        <div class="col-md-5">
+            <input
+                type="number"
+                name="maxPrice"
+                class="form-control"
+                placeholder="Maximum price (₹)"
+                min="0"
+                value="<%= typeof maxPrice !== 'undefined' ? maxPrice : '' %>"
+            >
+        </div>
+
+        <div class="col-md-2">
+            <a href="/listings" class="btn btn-outline-dark w-100">
+                Clear
+            </a>
+        </div>
+    </div>
+</form>
+
+
+<% if (allListings.length === 0) { %>
+
+    <div class="text-center mt-5">
+        <h4>No listings found!</h4>
+        <p>Try searching for another title, location, or country.</p>
+        <a href="/listings" class="btn btn-dark">
+            Show All Listings
+        </a>
+    </div>
+
+<% } else { %>
+
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+        <% for (let listing of allListings) { %>
+
+            <a href="/listings/<%= listing._id %>" class="listing-link">
+                <div class="card col">
+                    <img
+                        src="<%= listing.image.url %>"
+                        class="card-img-top"
+                        alt="listing_image"
+                        style="height: 20rem"
+                    >
+
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b><%= listing.title %></b><br>
+                            <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> /night
+                        </p>
+                    </div>
+                </div>
+            </a>
+
+        <% } %>
+    </div>
+
+<% } %>

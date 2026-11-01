@@ -1,0 +1,172 @@
+
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Admin Dashboard</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body text-center">
+            <h4>Welcome, <%= currentUser.username %>!</h4>
+            <p class="text-muted">
+                Manage listing verification from this dashboard.
+            </p>
+
+            <form action="/admin/logout" method="POST">
+                <button type="submit" class="btn btn-danger">
+                    Admin Logout
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<hr class="my-4">
+
+<h3 class="mb-3">Listings Awaiting Approval</h3>
+
+<% if (pendingListings.length === 0) { %>
+
+    <div class="alert alert-info">
+        No listings are waiting for approval.
+    </div>
+
+<% } else { %>
+
+    <div class="row">
+        <% for (let listing of pendingListings) { %>
+
+            <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                    <img
+                        src="<%= listing.image.url %>"
+                        class="card-img-top"
+                        alt="Listing image"
+                        style="height: 220px; object-fit: cover;"
+                    >
+
+                    <div class="card-body">
+                        <h5 class="card-title"><%= listing.title %></h5>
+
+                        <p class="card-text">
+                            <%= listing.description %>
+                        </p>
+
+                        <p>
+                            <strong>Price:</strong>
+                            ₹<%= listing.price %> / night
+                        </p>
+
+                        <p>
+                            <strong>Location:</strong>
+                            <%= listing.location %>, <%= listing.country %>
+                        </p>
+
+                        <span class="badge bg-warning text-dark">
+                            Pending
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+    <div class="d-flex gap-2 mt-3">
+        <form
+        action="/admin/listings/<%= listing._id %>/approve"
+        method="POST"
+        >
+        <button type="submit" class="btn btn-success">
+            Approve
+        </button>
+        </form>
+
+        <form
+        action="/admin/listings/<%= listing._id %>/reject"
+        method="POST"
+    >
+        <button type="submit" class="btn btn-danger">
+            Reject
+        </button>
+        </form>
+    </div>
+
+
+        <% } %>
+    </div>
+
+    <% } %>
+
+
+<hr class="my-4">
+
+<h3>Pending Bookings</h3>
+
+<% if (pendingBookings.length === 0) { %>
+
+    <p class="text-muted">No pending bookings.</p>
+
+<% } else { %>
+
+    <div class="row">
+        <% for (let booking of pendingBookings) { %>
+
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+
+                        <h5>
+                            <%= booking.listing.title %>
+                        </h5>
+
+                        <p>
+                            <strong>Customer:</strong>
+                            <%= booking.user.username %>
+                        </p>
+
+                        <p>
+                            <strong>Check-in:</strong>
+                            <%= booking.checkIn.toDateString() %>
+                        </p>
+
+                        <p>
+                            <strong>Check-out:</strong>
+                            <%= booking.checkOut.toDateString() %>
+                        </p>
+
+                        <p>
+                            <strong>Total Price:</strong>
+                            ₹<%= booking.totalPrice.toLocaleString("en-IN") %>
+                        </p>
+
+                        <span class="badge bg-warning text-dark">
+                            Pending
+                        </span>
+
+                        <div class="d-flex gap-2 mt-3">
+                            <form
+                                action="/admin/bookings/<%= booking._id %>/approve"
+                                method="POST"
+                            >
+                                <button class="btn btn-success btn-sm">
+                                    Approve
+                                </button>
+                            </form>
+
+                            <form
+                                action="/admin/bookings/<%= booking._id %>/reject"
+                                method="POST"
+                            >
+                                <button class="btn btn-danger btn-sm">
+                                    Reject
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        <% } %>
+    </div>
+
+<% } %>
+

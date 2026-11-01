@@ -1,0 +1,73 @@
+
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+    <h2>My Bookings</h2>
+    <hr>
+
+    <% if (bookings.length === 0) { %>
+        <div class="text-center mt-5">
+            <h4>You have no bookings yet.</h4>
+            <a href="/listings" class="btn btn-dark mt-3">
+                Explore Listings
+            </a>
+        </div>
+    <% } else { %>
+
+        <div class="row">
+            <% for (let booking of bookings) { %>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+
+                        <img
+                            src="<%= booking.listing.image.url %>"
+                            class="card-img-top"
+                            style="height: 220px; object-fit: cover;"
+                            alt="Listing image"
+                        >
+
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%= booking.listing.title %>
+                            </h5>
+
+                            <p>
+                                Check-in:
+                                <%= booking.checkIn.toDateString() %>
+                            </p>
+
+                            <p>
+                                Check-out:
+                                <%= booking.checkOut.toDateString() %>
+                            </p>
+
+                            <p>
+                                Total Price:
+                                ₹<%= booking.totalPrice.toLocaleString("en-IN") %>
+                            </p>
+
+                            <p>
+                                Status:
+                                <strong><%= booking.status %></strong>
+                            </p>
+                            <% if (booking.status === "pending") { %>
+                                    <form
+                                        action="/my-bookings/<%= booking._id %>/cancel"
+                                        method="POST"
+                                        >
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            Cancel Booking
+                                        </button>
+                                    </form>
+                            <% } %>
+                        </div>
+
+                    </div>
+                </div>
+
+            <% } %>
+        </div>
+
+    <% } %>
+</div>

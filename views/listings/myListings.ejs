@@ -1,0 +1,74 @@
+
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+    <h3 class="mb-4">My Listings</h3>
+
+    <% if (myListings.length === 0) { %>
+        <div class="alert alert-info">
+            You haven't created any listings yet.
+            <a href="/listings/new">Create your first listing</a>
+        </div>
+    <% } else { %>
+
+        <div class="row">
+            <% for (let item of myListings) { %>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+
+                        <img
+                            src="<%= item.image.url %>"
+                            class="card-img-top"
+                            alt="<%= item.title %>"
+                            style="height: 200px; object-fit: cover;"
+                        >
+
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%= item.title %>
+                            </h5>
+
+                            <p class="card-text">
+                                <%= item.location %>, <%= item.country %>
+                            </p>
+
+                            <p>
+                                <strong>Price:</strong>
+                                ₹<%= item.price %> / night
+                            </p>
+
+                            <p>
+                                <strong>Status:</strong>
+
+                                <% if (item.status === "pending") { %>
+                                    <span class="badge bg-warning text-dark">
+                                        Pending
+                                    </span>
+                                <% } else if (item.status === "approved") { %>
+                                    <span class="badge bg-success">
+                                        Approved
+                                    </span>
+                                <% } else if (item.status === "rejected") { %>
+                                    <span class="badge bg-danger">
+                                        Rejected
+                                    </span>
+                                <% } %>
+                            </p>
+
+                            <% if (item.status === "approved") { %>
+                                <a
+                                    href="/listings/<%= item._id %>"
+                                    class="btn btn-dark btn-sm"
+                                >
+                                    View Listing
+                                </a>
+                            <% } %>
+                        </div>
+
+                    </div>
+                </div>
+            <% } %>
+        </div>
+
+    <% } %>
+</div>
